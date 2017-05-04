@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">UdacityProjectBookListing</string>
+    <string name="search_title">Search</string>
+    <string name="no_books">No books found.</string>
+    <string name="by">By</string>
+    <string name="no_internet_connection">No internet connection.</string>
+    <string name="starting_view">Search for your favourite books!</string>
+</resources>

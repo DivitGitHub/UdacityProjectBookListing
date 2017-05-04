@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="very_small_padding">4dp</dimen>
+    <dimen name="small_padding">8dp</dimen>
+    <dimen name="author">10sp</dimen>
+    <dimen name="title">16sp</dimen>
+    <dimen name="desc">12sp</dimen>
+</resources>
