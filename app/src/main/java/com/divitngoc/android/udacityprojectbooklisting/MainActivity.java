@@ -3,11 +3,13 @@ package com.divitngoc.android.udacityprojectbooklisting;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,17 +29,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private TextView mEmptyStateTextView;
 
     //base URL
-    private static final String BASE_URL = " https://www.googleapis.com/books/v1/volumes?q=";
+    private static final String BASE_URL = "https://www.googleapis.com/books/v1/volumes?";
 
     //max results 15 per query
     private static final String END_URL = "&maxResults=15";
 
     private String userQuery = "";
-
+    private final String QUERY_PARAMETER = "q";
+    private final String MAX_RESULTS_PARAMETER = "maxResults";
+    private final String MAX_RESULTS_VALUE = "15";
     private View loadingIndicator;
-
     private BookArrayAdapter bookArrayAdapter;
-
     private LoaderManager loaderManager;
 
     @Override
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                 TextView descriptionText = (TextView) view.findViewById(R.id.description);
 
-                if(descriptionText.getLineCount() == 2) {
+                if (descriptionText.getLineCount() == 2) {
                     descriptionText.setMaxLines(Integer.MAX_VALUE);
                 } else {
                     descriptionText.setMaxLines(2);
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     return false;
                 }
 
-                userQuery = BASE_URL + query.trim() + END_URL;
+                userQuery = query.trim();
 
                 //shows load the loading indicator after query is submitted
                 loadingIndicator = findViewById(R.id.loading_indicator);
@@ -141,7 +143,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<Book>> onCreateLoader(int id, Bundle args) {
-        return new BookLoader(MainActivity.this, userQuery);
+        Uri baseUrl = Uri.parse(BASE_URL);
+        Uri.Builder uriBuilder = baseUrl.buildUpon();
+
+        uriBuilder.appendQueryParameter(QUERY_PARAMETER, userQuery);
+        uriBuilder.appendQueryParameter(MAX_RESULTS_PARAMETER, MAX_RESULTS_VALUE);
+        Log.v("Main", uriBuilder.toString());
+        return new BookLoader(MainActivity.this, uriBuilder.toString());
     }
 
     @Override
@@ -163,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<List<Book>> loader) {
-       bookArrayAdapter.clear();
+        bookArrayAdapter.clear();
     }
 
 }
